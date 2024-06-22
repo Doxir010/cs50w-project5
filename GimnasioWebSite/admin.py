@@ -9,9 +9,9 @@ class usuarioConfig(UserAdmin):
     ordering = ("username",)
 
 class planConfig(UserAdmin):
-    list_display = ("id", "nombre", "descripcion", "precio")
-    ordering = ("nombre",)
-    search_fields = ("nombre", "precio")
+    list_display = ["nombre", "descripcion", "precio"]
+    # ordering = ("nombre",)
+    # search_fields = ("nombre", "precio")
 
 class suscripcionConfig(UserAdmin):
     list_display = ("id", "cliente__username", "plan", "fechaInicio", "fechaFinal")
@@ -22,7 +22,6 @@ class suscripcionConfig(UserAdmin):
     
 class pagoplanConfig(UserAdmin):
     list_display = ("id", "cliente", "plan", "fechaPago")
-    
     
 class asistenciaConfig(UserAdmin):
     list_display = ("id", "Usuario", "horaEntrada", "horaSalida")

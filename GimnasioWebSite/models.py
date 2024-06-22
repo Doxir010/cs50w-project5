@@ -9,7 +9,8 @@ class Usuario(AbstractUser):
     direccion = models.TextField(max_length=100, blank=True, null=True)
     
     def __str__(self):
-        return f"Nombre: {self.first_name} {self.last_name} // Telefono: {self.telefono} // Dirección: {self.direccion} // Telefono de emergencia: {self.telefonoEmergencia}"
+        # return f"Nombre: {self.first_name} {self.last_name} // Telefono: {self.telefono} // Dirección: {self.direccion} // Telefono de emergencia: {self.telefonoEmergencia}"
+        return f"Nombre: {self.first_name} {self.last_name}"
     
     
 class Plan(models.Model):
