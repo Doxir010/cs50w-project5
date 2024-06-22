@@ -1,0 +1,52 @@
+{% extends "GimnasiWebSite/layout.html" %}
+
+{% block body %}
+
+    <h2>Registrate</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div>
+            <input autofocus type="text" name="names" placeholder="Primer y/o segundo nombre">
+        </div>
+        <br>
+        <div>
+            <input autofocus type="text" name="lastNames" placeholder="Primer y/o segundo apellido">
+        </div>
+        <br>
+        <div>
+            <input autofocus type="text" name="number" placeholder="Numero telefonico">
+        </div>
+        <br>
+        <div>
+            <input autofocus type="text" name="emergencyNumber" placeholder="Numero telefonico de emergencia">
+        </div>
+        <br>
+        <div>
+            <input autofocus type="text" name="address" placeholder="Dirección">
+        </div>
+        <br>
+        <div>
+            <input type="email" name="email" placeholder="Correo electrónico">
+        </div>
+        <br>
+        <div>
+            <input type="password" name="password" placeholder="Contraseña">
+        </div>
+        <br>
+        <div>
+            <input type="password" name="confirmation" placeholder="Confirmación de contraseña">
+        </div>
+        <br>
+        <div>
+            <input type="submit" value="Crear cuenta">
+        </div>
+    </form>
+
+    ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí.</a>
+
+{% endblock %}
