@@ -1,0 +1,12 @@
+#principalNavBar {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* .logoNavBar {} */
+
+.menu ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}

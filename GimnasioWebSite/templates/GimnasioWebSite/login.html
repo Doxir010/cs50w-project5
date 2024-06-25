@@ -1,4 +1,4 @@
-{% extends "GimnasiWebSite/layout.html" %}
+{% extends "GimnasioWebSite/layout.html" %}
 
 {% block body %}
 
@@ -19,6 +19,12 @@
             <input class="btn btn-primary" type="submit" value="Iniciar sesión">
         </div>
     </form>
+
+    {% if alerta %}
+    <br>
+        {{ alerta }}
+    <br>
+    {% endif %}
 
     ¿No tienes una cuenta? <a href="{% url 'register' %}">Registrate aquí.</a>
 

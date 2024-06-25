@@ -11,7 +11,7 @@ import json
 # Create your views here.
 
 def home (request):
-    return render(request, 'GimnasioWebSite/gym.html')
+    return render(request, 'GimnasioWebSite/landingPage.html')
 
 def register(request):
     if request.method == "POST":
@@ -28,8 +28,10 @@ def register(request):
             try:
                 username = helpers.generarUsername(nombres, apellidos)
                 nuevoUsuario = Usuario.objects.create_user(
-                    username, correo, password, nombres, apellidos, numeroTelefonico, numeroTelefonicoEmergencia, direccion)
-                nuevoUsuario.save()
+                    username=username, email=correo, password=password, first_name=nombres, last_name=apellidos,
+                      telefono=numeroTelefonico, telefonoEmergencia=numeroTelefonicoEmergencia, direccion=direccion, rol="Cliente")
+                login(request, nuevoUsuario)
+                return redirect(home)
             except IntegrityError as e:
                 print(e)
                 return render(request, "GimnasioWebSite/register.html")
@@ -38,7 +40,7 @@ def register(request):
         return render(request, "GimnasioWebSite/register.html")
     
 
-def login(request):
+def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -48,6 +50,12 @@ def login(request):
         if AutenticacionUsuario is not None:
             login(request, AutenticacionUsuario)
             return redirect(home)
+            
+        else:
+            mensaje ='Nombre de usuario o contraseña no valida'
+            return render(request, "GimnasioWebSite/login.html", {
+                "alerta":mensaje
+            })
     
     else:
         return render(request, "GimnasioWebSite/login.html")
@@ -56,3 +64,11 @@ def login(request):
 def CerrarSesion(request):
     logout(request)
     return redirect(home)
+
+
+def pagarSuscripcion(request):
+    return render(request, "GimnasioWebSite/pagoSuscripcion.html")
+
+
+def verSuscripciones(request):
+    return render(request, "GimnasioWebSite/verSuscripciones.html")

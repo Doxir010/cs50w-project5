@@ -1,0 +1,27 @@
+{% extends 'GimnasioWebSite/layout.html' %}
+
+{% block body %}
+  <div id="TituloYLogoIndex">
+    <h1>Gimnasio Codemakers</h1>
+    <img src="#" alt="logo" />
+  </div>
+  <section id="InformacionSuscripcionesIndex">
+    {% for plan in planes %}
+      <article class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Precio: <strong>{{ plan.precio }} córdobas</strong></h6>
+          <p class="card-text">{{ plan.descripcion }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <section id="CarruselImagenesIndex"></section>
+
+  <section id="InformacionMaquinasIndex"></section>
+
+  <section id="InformacionStaffIndex"></section>
+
+  <footer id="FooterGeneral"></footer>
+{% endblock %}
