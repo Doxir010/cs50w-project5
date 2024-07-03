@@ -66,9 +66,25 @@ def CerrarSesion(request):
     return redirect(home)
 
 
-def pagarSuscripcion(request):
-    return render(request, "GimnasioWebSite/pagoSuscripcion.html")
+def pagarSuscripcion(request, nombre):
+    instanciaPlan = nombre
+    if request.method == 'POST':
+        titular = request.POST["name"]
+        numeroTarjeta = request.POST["cardNumber"]
+        fechaVencimiento = request.POST["expDate"]
+        CVV = request.POST["CVV"]
+        print(titular)
+        print(numeroTarjeta)
+        print(fechaVencimiento)
+        print(CVV)
+
+        return redirect(pagarSuscripcion, nombre=nombre)
+    return render(request, "GimnasioWebSite/pagoSuscripcion.html", {
+        'Plan': instanciaPlan
+    })
 
 
 def verSuscripciones(request):
-    return render(request, "GimnasioWebSite/verSuscripciones.html")
+    return render(request, "GimnasioWebSite/verSuscripciones.html", {
+        "Suscripciones": Plan.objects.all()
+    })

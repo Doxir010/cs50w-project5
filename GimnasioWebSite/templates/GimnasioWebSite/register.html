@@ -11,11 +11,11 @@
     <form action="{% url 'register' %}" method="post">
         {% csrf_token %}
         <div>
-            <input autofocus type="text" name="names" placeholder="Primer y/o segundo nombre">
+            <input autofocus type="text" name="names" placeholder="Primer y/o segundo nombre" required>
         </div>
         <br>
         <div>
-            <input autofocus type="text" name="lastNames" placeholder="Primer y/o segundo apellido">
+            <input autofocus type="text" name="lastNames" placeholder="Primer y/o segundo apellido" required>
         </div>
         <br>
         <div>
@@ -31,15 +31,15 @@
         </div>
         <br>
         <div>
-            <input type="email" name="email" placeholder="Correo electrónico">
+            <input type="email" name="email" placeholder="Correo electrónico" required>
         </div>
         <br>
         <div>
-            <input type="password" name="password" placeholder="Contraseña">
+            <input type="password" name="password" placeholder="Contraseña" required>
         </div>
         <br>
         <div>
-            <input type="password" name="confirmation" placeholder="Confirmación de contraseña">
+            <input type="password" name="confirmation" placeholder="Confirmación de contraseña" required>
         </div>
         <br>
         <div>

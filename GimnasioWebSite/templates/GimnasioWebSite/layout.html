@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'GimnasioWebSite/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'GimnasioWebSite/paymentStyle.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <title>
       {% block title %}
@@ -22,7 +23,7 @@
         <ul>
           <a href="#"><li>Informacion</li></a> 
           {% comment %} {% if request.user.rol == 'Cliente' and user.is_authenticated and request.user.rol != 'Entrenador' %} {% endcomment %}
-            <a href="{% url 'pagoSuscripcion' %}"><li>Suscribirse</li></a>
+            <a href="{% url 'verSuscripciones' %}"><li>Suscribirse</li></a>
             <a href="{% url 'verSuscripciones' %}"><li>Mis Suscripciones</li></a>
           {% comment %} {% else %} {% endcomment %}
             {% comment %} <a href="#"><li>Administrar</li></a> {% endcomment %}
