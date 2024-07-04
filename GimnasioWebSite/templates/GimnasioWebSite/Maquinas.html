@@ -1,5 +1,35 @@
 {% extends 'GimnasioWebSite/layout.html' %}
 
 {% block body %}
+<section name="TituloPaginaYFiltrarTipos">
+    <h2 class="templatesTitle">Nuestras maquinas...</h2>
+    <div id="machinesFilter">
+        <h4>filtrar maquinas por tipos</h4>
+        <select name="selectTypes" id="typesMaquines">
+            <option value="sinFiltro">Todas las maquinas</option>
+            <option value="Brazos">Brazos</option>
+            <option value="Espalda">Espalda</option>
+            <option value="Pecho">Pecho</option>
+            <option value="Piernas">Piernas</option>
+        </select>
+    </div>
+</section>
 
+<section name="VisualizarMaquinas" id="gridMaquinas">
+    {% for maquina in Maquinas %}
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-sm">
+                <img src="{{ maquina.imagen }}" class="card-img-top" alt="{{ maquina.nombre }}" style="overflow: hidden; width: 100%; height: 25vh;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ maquina.nombre }}</h5>
+                    <hr>
+                    <p class="card-text">{{ maquina.descripcion }}</p>
+                    {% if maquina.masInfo %}
+                    <label> para mas informacion haz clic <a href="{{ maquina.masInfo }}" class="btn btn-primary">Aquí</a></label>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</section>
 {% endblock %}

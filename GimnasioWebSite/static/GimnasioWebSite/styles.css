@@ -3,7 +3,10 @@
     justify-content: space-between;
 }
 
-/* .logoNavBar {} */
+#imgLogoNavbarMain{
+    width: 30;
+    height: 30;
+}
 
 .menu ul {
     display: flex;

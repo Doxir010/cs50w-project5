@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .helpers import Role_options as roles
+from .helpers import Machines_Types as MaquinasTipo
 
 # Create your models here.
 
@@ -11,9 +12,27 @@ class Usuario(AbstractUser):
     rol = models.CharField(max_length=25, blank=True, null=True, choices=roles)
     
     def __str__(self):
-        # return f"Nombre: {self.first_name} {self.last_name} // Telefono: {self.telefono} // Dirección: {self.direccion} // Telefono de emergencia: {self.telefonoEmergencia}"
-        return f"Nombre: {self.first_name} {self.last_name}"
+        return f"ID: {self.id} - Nombre: {self.first_name} {self.last_name}"
 
+
+class Staff(Usuario):
+    imagen = models.URLField(max_length = 200, blank=True, null=True)
+    descripcion = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.rol}"
+    
+    
+class Maquina(models.Model):
+    nombre = models.CharField(max_length=100)
+    imagen = models.URLField(max_length = 200)
+    descripcion = models.TextField(blank=True, null=True)
+    masInfo = models.URLField(max_length = 200, null=True, blank=True)
+    tipo = models.CharField(max_length=15, choices=MaquinasTipo)
+    
+    def __str__(self):
+        return f"{self.nombre}"
+    
     
 class Plan(models.Model):
     nombre = models.CharField(max_length=12)
@@ -22,7 +41,7 @@ class Plan(models.Model):
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     
     def __str__(self):
-        return f"Nombre: {self.nombre} // Duracion: {self.duracion} // Precio: {self.precio}"
+        return f"{self.nombre} - Duracion: {self.duracion} - Precio: {self.precio}"
     
     
 class Suscripcion(models.Model):
@@ -32,7 +51,7 @@ class Suscripcion(models.Model):
     fechaFinal = models.DateField()
     
     def __str__(self):
-        return f"Nombre del cliente: {self.cliente} // Plan pagado: {self.plan} // Fecha de inicio del plan: {self.fechaInicio} // Fecha final del plan: {self.fechaFinal}"
+        return f"Cliente: {self.cliente} - Plan pagado: {self.plan} - Fecha de inicio: {self.fechaInicio}"
 
 
 class PagoPlan(models.Model):
@@ -41,7 +60,7 @@ class PagoPlan(models.Model):
     fechaPago = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"Nombre del cliente: {self.cliente} // Plan pagado: {self.plan} // Fecha de pago: {self.fechaPago}"
+        return f"Cliente: {self.cliente} // Plan pagado: {self.plan} // Fecha de pago: {self.fechaPago}"
     
 
 class Factura(models.Model):
@@ -60,4 +79,4 @@ class Asistencia(models.Model):
     horaSalida = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return f"Nombre: {self.Usuario.first_name} {self.Usuario.last_name} // Fecha y hora de entrada: {self.horaEntrada} // Fecha y hora de salida: {self.horaSalida}"
+        return f"Nombre: {self.Usuario.first_name} {self.Usuario.last_name} - Fecha y hora de entrada: {self.horaEntrada}"

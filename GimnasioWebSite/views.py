@@ -60,12 +60,28 @@ def login_view(request):
     else:
         return render(request, "GimnasioWebSite/login.html")
     
-    
+@login_required 
 def CerrarSesion(request):
     logout(request)
     return redirect(home)
 
+def verStaff(request):
+    return render(request, "GimnasioWebSite/infoStaff.html")
 
+
+def verMaquinas(request):
+    maquinas = Maquina.objects.all()
+    return render(request, "GimnasioWebSite/Maquinas.html", {
+        "Maquinas": maquinas,
+    })
+
+
+def verSuscripciones(request):
+    return render(request, "GimnasioWebSite/verSuscripciones.html", {
+        "Suscripciones": Plan.objects.all()
+    })
+    
+    
 def pagarSuscripcion(request, nombre):
     instanciaPlan = nombre
     if request.method == 'POST':
@@ -77,14 +93,3 @@ def pagarSuscripcion(request, nombre):
         print(numeroTarjeta)
         print(fechaVencimiento)
         print(CVV)
-
-        return redirect(pagarSuscripcion, nombre=nombre)
-    return render(request, "GimnasioWebSite/pagoSuscripcion.html", {
-        'Plan': instanciaPlan
-    })
-
-
-def verSuscripciones(request):
-    return render(request, "GimnasioWebSite/verSuscripciones.html", {
-        "Suscripciones": Plan.objects.all()
-    })

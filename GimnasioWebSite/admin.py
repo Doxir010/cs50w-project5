@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Usuario, Plan, Suscripcion, PagoPlan, Asistencia
+from .models import *
 from django.contrib.auth.admin import UserAdmin
 
 #
@@ -31,6 +31,8 @@ class asistenciaConfig(UserAdmin):
 # Register your models here.
 
 admin.site.register(Usuario)
+admin.site.register(Staff)
+admin.site.register(Maquina)
 admin.site.register(Plan)
 admin.site.register(Suscripcion)
 admin.site.register(PagoPlan)

@@ -23,8 +23,10 @@
         <ul>
           <a href="#"><li>Informacion</li></a> 
           {% comment %} {% if request.user.rol == 'Cliente' and user.is_authenticated and request.user.rol != 'Entrenador' %} {% endcomment %}
-            <a href="{% url 'verSuscripciones' %}"><li>Suscribirse</li></a>
-            <a href="{% url 'verSuscripciones' %}"><li>Mis Suscripciones</li></a>
+          {% if user.is_authenticated %}
+          <a href="{% url 'verSuscripciones' %}"><li>Suscribirse</li></a>
+          <a href="{% url 'verSuscripciones' %}"><li>Mis Suscripciones</li></a>
+          {% endif %}
           {% comment %} {% else %} {% endcomment %}
             {% comment %} <a href="#"><li>Administrar</li></a> {% endcomment %}
           {% comment %} {% endif %} {% endcomment %}
@@ -38,7 +40,6 @@
       </div>
     </nav>
     {% block body %}
-
     {% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{% static 'GimnasioWebSite/main.js' %}"></script>

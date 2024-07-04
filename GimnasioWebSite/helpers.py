@@ -8,3 +8,10 @@ Role_options = (
     ("Asistente", "Asistente"),
     ("Entrenador", "Entrenador"),
 )
+
+Machines_Types = (
+    ("Piernas", "Piernas"),
+    ("Pecho", "Pecho"),
+    ("Brazos", "Brazos"),
+    ("Espalda", "Espalda"),
+)

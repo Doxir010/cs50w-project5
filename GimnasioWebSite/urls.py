@@ -10,4 +10,6 @@ urlpatterns = [
     path("logout", views.CerrarSesion, name="logout"),
     path("suscripciones/pago/<str:nombre>", views.pagarSuscripcion, name="pagoSuscripcion"),
     path("suscripciones/ver", views.verSuscripciones, name="verSuscripciones"),
+    path("info/staff", views.verStaff, name="infoStaff"),
+    path("info/maquinas", views.verMaquinas, name="infoMaquinas"),
 ]
