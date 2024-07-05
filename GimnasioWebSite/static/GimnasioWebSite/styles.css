@@ -1,91 +1,170 @@
-#principalNavBar {
-    display: flex;
-    justify-content: space-between;
+body {
+  font-family: Arial, sans-serif;
 }
 
-#imgLogoNavbarMain{
-    width: 30;
-    height: 30;
+#principalNavBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+#imgLogoNavbarMain {
+  width: 30px;
+  height: 30px;
 }
 
 .menu ul {
-    display: flex;
-    gap: 25px;
-    list-style: none;
+  display: flex;
+  gap: 25px;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
 }
 
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
-  }
-  
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1050;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
+.menu ul li {
+  display: inline;
 }
-  
+
+.navbar-brand img {
+  height: 40px;
+}
+
+.nav-item .nav-link {
+  color: #333;
+}
+
+.nav-item .nav-link:hover {
+  color: #007bff;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' linecap='round' linejoin='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Cartas */
+.card {
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Modales */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 800px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.5);
-    animation: fadeIn 0.3s;
+  background-color: #fefefe;
+  margin: auto;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.5);
+  animation: fadeIn 0.3s;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .btn-close {
-    border: none;
-    background: none;
-    font-size: 1.5rem;
+  border: none;
+  background: none;
+  font-size: 1.5rem;
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #dee2e6;
-    padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
 }
 
 .modal-body {
-    padding: 1.5rem;
+  padding: 1.5rem;
 }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 767px) {
-    .form-check {
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Form Styles */
+#registerForm .form-control {
+  margin-bottom: 1rem;
+}
+
+#registerForm .text-danger {
+  font-size: 0.875rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+  .form-check {
       display: block;
       margin-bottom: 15px;
-    }
-  
-    .modal-content {
-      width: 95%;
-    }
   }
+
+  .modal-content {
+      width: 95%;
+  }
+}
+
+/* Success and Error Modals */
+#successModal .modal-title,
+#errorModal .modal-title {
+  font-weight: bold;
+}
+
+#successModal .modal-body,
+#errorModal .modal-body {
+  font-size: 1.1rem;
+}
+
+#successModal .btn-primary,
+#errorModal .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+#successModal .btn-primary:hover,
+#errorModal .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}

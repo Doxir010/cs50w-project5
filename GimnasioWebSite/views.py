@@ -36,11 +36,16 @@ def register(request):
                 return redirect(home)
             except IntegrityError as e:
                 print(e)
-                return render(request, "GimnasioWebSite/register.html")
-    
+                return render(request, "GimnasioWebSite/register.html", {
+                    "message": "ERROR: usuario ya existente"
+                })
+        else:
+            return render(request, "GimnasioWebSite/register.html", {
+            "message": "La contraseña y su validacion deben ser iguales"
+            })
     else:
         return render(request, "GimnasioWebSite/register.html")
-    
+            
 
 def login_view(request):
     if request.method == "POST":
@@ -56,7 +61,7 @@ def login_view(request):
         else:
             mensaje ='Nombre de usuario o contraseña no valida'
             return render(request, "GimnasioWebSite/login.html", {
-                "alerta":mensaje
+                "message": mensaje
             })
     
     else:
@@ -141,7 +146,10 @@ def get_attendance_data(request):
 def add_attendance(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.get_json_body().decode('utf-8'))
+            # Decodificar el cuerpo de la solicitud como JSON
+            data = json.loads(request.body.decode('utf-8'))
+
+            # Extraer datos del JSON
             role_option = data.get('roleOption')
             user_input = data.get('userInput')
             entry_date = parse_datetime(data.get('entryDate'))
@@ -149,7 +157,14 @@ def add_attendance(request):
             entry_time = parse_datetime(data.get('entryTime'))
             exit_time = parse_datetime(data.get('exitTime'))
 
+            # Verificar que todos los campos requeridos están presentes
+            if not all([role_option, user_input, entry_date, compliance, entry_time]):
+                return JsonResponse({'success': False, 'error': 'Faltan campos requeridos.'}, status=400)
+
+            # Obtener el usuario por ID
             usuario = Usuario.objects.get(id=user_input)
+
+            # Crear una nueva asistencia
             if role_option == 'Cliente':
                 Asistencia.objects.create(
                     Usuario=usuario,
@@ -163,6 +178,7 @@ def add_attendance(request):
                     horaSalida=exit_time
                 )
             return JsonResponse({'success': True})
+
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Error de decodificación JSON'}, status=400)
         except KeyError as e:
@@ -173,3 +189,5 @@ def add_attendance(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
     return HttpResponseBadRequest('Método no permitido')
+
+

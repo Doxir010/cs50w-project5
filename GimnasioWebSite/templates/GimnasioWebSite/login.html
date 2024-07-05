@@ -1,31 +1,37 @@
 {% extends "GimnasioWebSite/layout.html" %}
+{% load static %}
 
 {% block body %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Inicia sesión</h2>
 
-    <h2>Inicia sesión</h2>
+                    <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input autofocus class="form-control" type="text" name="username" placeholder="Nombre de usuario">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" type="password" name="password" placeholder="Contraseña">
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-block" type="submit">Iniciar sesión</button>
+                        </div>
+                    </form>
 
+                    {% if alerta %}
+                    <div class="alert alert-warning mt-3">{{ alerta }}</div>
+                    {% endif %}
 
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div>
-            <input autofocus class="form-control" type="text" name="username" placeholder="Nombre de usuario">
+                    <div class="text-center mt-3">
+                        ¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí.</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br>
-        <div>
-            <input class="form-control" type="password" name="password" placeholder="Contraseña">
-        </div>
-        <br>
-        <div>
-            <input class="btn btn-primary" type="submit" value="Iniciar sesión">
-        </div>
-    </form>
-
-    {% if alerta %}
-    <br>
-        {{ alerta }}
-    <br>
-    {% endif %}
-
-    ¿No tienes una cuenta? <a href="{% url 'register' %}">Registrate aquí.</a>
-
+    </div>
+</div>
 {% endblock %}

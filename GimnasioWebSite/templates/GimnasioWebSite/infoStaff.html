@@ -1,35 +1,48 @@
 {% extends 'GimnasioWebSite/layout.html' %}
 
 {% block body %}
-    <h2>Nuestro personal</h2>
+<div class="container mt-4">
+    <h2 class="text-center">Nuestro Personal</h2>
     <hr>
     <br>
-    <br>
     <section name="entrenadores">    
-        <h3>Entrenadores</h3>
-        {% for entrenador in Entrenadores %}
-            <article class="staff-descripcion" style="display: flex; align-content: space-between;">
-
-            </article>
-        {% endfor %}
+        <h3 class="mb-4">Entrenadores</h3>
+        <div class="row">
+            {% for entrenador in Entrenadores %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ entrenador.imagen }}" class="card-img-top" alt="{{ entrenador.nombre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entrenador.nombre }}</h5>
+                            <p class="card-text">{{ entrenador.descripcion }}</p>
+                            {% if request.username == entrenador.username %}
+                            <button type="button" class="btn btn-info" id="CambiarDescripcion">Cambiar descripción</button>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </section>
     <br>
     <section name="asistentes">    
-        <h3>Asistentes</h3>
-        {% for asistente in Asistentes %}
-            <article class="staff-descripcion" style="display: flex; align-content: space-between;">
-                <img src=".imagen" alt="">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">{{ asistente.nombre }}</h5>
-                      <hr>
-                      <p class="card-text">{{ asistente.descripcion }}</p>
-                      {% if request.username == asistente.username %}
-                        <button type="button" class="btn btn-info" id="CambiarDescripcion">Cambiar descripcion</button>
-                      {% endif %}
+        <h3 class="mb-4">Asistentes</h3>
+        <div class="row">
+            {% for asistente in Asistentes %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ asistente.imagen }}" class="card-img-top" alt="{{ asistente.nombre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ asistente.nombre }}</h5>
+                            <p class="card-text">{{ asistente.descripcion }}</p>
+                            {% if request.username == asistente.username %}
+                                <button type="button" class="btn btn-info" id="CambiarDescripcion">Cambiar descripción</button>
+                            {% endif %}
+                        </div>
                     </div>
-                  </div>
-            </article>
-        {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </section>
+</div>
 {% endblock %}
