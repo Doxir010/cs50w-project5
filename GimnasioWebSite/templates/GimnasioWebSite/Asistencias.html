@@ -1,5 +1,99 @@
 {% extends 'GimnasioWebSite/layout.html' %}
+{% load static %}
 
 {% block body %}
+<div class="container-fluid mt-5">
+    <h1 class="mb-4 text-center">Asistencias</h1>
+    <div class="row mb-4">
+        <div class="col-md-3 mb-2">
+            <label for="roleFilter" class="form-label">Filtrar por rol:</label>
+            <select id="roleFilter" class="form-select">
+                <option value="all">Todos</option>
+                <option value="Cliente">Cliente</option>
+                <option value="Staff">Staff</option>
+            </select>
+        </div>
+        <div class="col-md-3 mb-2">
+            <label for="sortOrder" class="form-label">Ordenar por:</label>
+            <select id="sortOrder" class="form-select">
+                <option value="asc">Cronológico</option>
+                <option value="desc">Más recientes primero</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-2">
+            <label for="searchName" class="form-label">Buscar por nombre:</label>
+            <div class="input-group">
+                <input type="text" id="searchName" class="form-control" placeholder="Buscar por nombre">
+                <button class="btn btn-primary" id="searchButton">Buscar</button>
+            </div>
+        </div>
+        <div class="col-md-2 mb-2 d-flex align-items-end">
+            <button class="btn btn-success w-100" id="addAttendanceButton">Añadir Asistencia</button>
+        </div>
+    </div>
 
+    <div id="attendanceModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Añadir Asistencia</h5>
+                    <button type="button" class="btn-close" aria-label="Close" id="closeModal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="attendanceForm">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="roleOption" id="clientOption" value="Cliente" checked>
+                            <label class="form-check-label" for="clientOption">Cliente</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="roleOption" id="staffOption" value="Staff">
+                            <label class="form-check-label" for="staffOption">Staff</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userInput" class="form-label">Nombre completo:</label>
+                            <input type="text" class="form-control" id="userInput" autocomplete="off">
+                        </div>
+                        <div id="clientFields">
+                            <div class="mb-3">
+                                <label for="entryDate" class="form-label">Fecha de entrada:</label>
+                                <input type="date" class="form-control" id="entryDate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="compliance" class="form-label">Cumplimiento:</label>
+                                <input type="text" class="form-control" id="compliance">
+                            </div>
+                        </div>
+                        <div id="staffFields" style="display:none;">
+                            <div class="mb-3">
+                                <label for="entryTime" class="form-label">Hora de entrada:</label>
+                                <input type="time" class="form-control" id="entryTime">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exitTime" class="form-label">Hora de salida:</label>
+                                <input type="time" class="form-control" id="exitTime">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="attendanceTableContainer" class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Hora de Entrada</th>
+                    <th>Hora de Salida / Cumplimiento</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="{% static 'GimnasioWebSite/asistencias.js' %}"></script>
 {% endblock %}

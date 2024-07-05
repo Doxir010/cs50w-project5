@@ -77,6 +77,7 @@ class Asistencia(models.Model):
     Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     horaEntrada = models.DateTimeField(auto_now_add=True)
     horaSalida = models.DateTimeField(null=True, blank=True)
+    cumplimiento = models.CharField(max_length=8,null=True,blank=True)
     
     def __str__(self):
         return f"Nombre: {self.Usuario.first_name} {self.Usuario.last_name} - Fecha y hora de entrada: {self.horaEntrada}"

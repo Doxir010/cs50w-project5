@@ -1,5 +1,35 @@
 {% extends 'GimnasioWebSite/layout.html' %}
 
 {% block body %}
+    <h2>Nuestro personal</h2>
+    <hr>
+    <br>
+    <br>
+    <section name="entrenadores">    
+        <h3>Entrenadores</h3>
+        {% for entrenador in Entrenadores %}
+            <article class="staff-descripcion" style="display: flex; align-content: space-between;">
 
+            </article>
+        {% endfor %}
+    </section>
+    <br>
+    <section name="asistentes">    
+        <h3>Asistentes</h3>
+        {% for asistente in Asistentes %}
+            <article class="staff-descripcion" style="display: flex; align-content: space-between;">
+                <img src=".imagen" alt="">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ asistente.nombre }}</h5>
+                      <hr>
+                      <p class="card-text">{{ asistente.descripcion }}</p>
+                      {% if request.username == asistente.username %}
+                        <button type="button" class="btn btn-info" id="CambiarDescripcion">Cambiar descripcion</button>
+                      {% endif %}
+                    </div>
+                  </div>
+            </article>
+        {% endfor %}
+    </section>
 {% endblock %}

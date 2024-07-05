@@ -12,4 +12,9 @@ urlpatterns = [
     path("suscripciones/ver", views.verSuscripciones, name="verSuscripciones"),
     path("info/staff", views.verStaff, name="infoStaff"),
     path("info/maquinas", views.verMaquinas, name="infoMaquinas"),
+    path('asistencias', views.asistencias, name='asistencias'),
+    
+    #URLs de API
+    path('asistencias/data', views.get_attendance_data, name='get_attendance_data'),
+    path('asistencias/add', views.add_attendance, name='add_attendance'),
 ]

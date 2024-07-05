@@ -4,8 +4,10 @@ from . import helpers
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.utils.dateparse import parse_datetime
 import json
 
 # Create your views here.
@@ -93,3 +95,81 @@ def pagarSuscripcion(request, nombre):
         print(numeroTarjeta)
         print(fechaVencimiento)
         print(CVV)
+        return redirect(pagarSuscripcion, nombre=nombre)
+    
+    else:
+        return render(request, "GimnasioWebSite/pagoSuscripcion.html", {
+            "Plan": instanciaPlan
+        })
+        
+
+@login_required
+def asistencias(request):
+    return render(request, 'GimnasioWebSite/asistencias.html')
+
+def get_attendance_data(request):
+    role = request.GET.get('role', 'all')
+    order = request.GET.get('order', 'asc')
+    name = request.GET.get('name', '')
+
+    if role == 'Cliente':
+        users = Usuario.objects.filter(rol='Cliente')
+    elif role == 'Staff':
+        users = Usuario.objects.filter(rol__in=['Asistente', 'Entrenador'])
+    else:
+        users = Usuario.objects.all()
+
+    if name:
+        users = users.filter(first_name__icontains=name) | users.filter(last_name__icontains=name)
+
+    if order == 'asc':
+        asistencias = Asistencia.objects.filter(Usuario__in=users).order_by('horaEntrada')
+    else:
+        asistencias = Asistencia.objects.filter(Usuario__in=users).order_by('-horaEntrada')
+
+    data = []
+    for asistencia in asistencias:
+        data.append({
+            'nombreCompleto': f"{asistencia.Usuario.first_name} {asistencia.Usuario.last_name}",
+            'horaEntrada': asistencia.horaEntrada.isoformat(),
+            'horaSalida': asistencia.horaSalida.isoformat() if asistencia.horaSalida else None,
+            'cumplimiento': asistencia.cumplimiento,
+        })
+
+    return JsonResponse(data, safe=False)
+
+def add_attendance(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.get_json_body().decode('utf-8'))
+            role_option = data.get('roleOption')
+            user_input = data.get('userInput')
+            entry_date = parse_datetime(data.get('entryDate'))
+            compliance = data.get('compliance')
+            entry_time = parse_datetime(data.get('entryTime'))
+            exit_time = parse_datetime(data.get('exitTime'))
+
+            usuario = Usuario.objects.get(id=user_input)
+            if role_option == 'Cliente':
+                Asistencia.objects.create(
+                    Usuario=usuario,
+                    horaEntrada=entry_date,
+                    cumplimiento=compliance
+                )
+            else:
+                Asistencia.objects.create(
+                    Usuario=usuario,
+                    horaEntrada=entry_time,
+                    horaSalida=exit_time
+                )
+            return JsonResponse({'success': True})
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Error de decodificación JSON'}, status=400)
+        except KeyError as e:
+            return JsonResponse({'success': False, 'error': f'Falta el campo requerido: {e}'}, status=400)
+        except Usuario.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Usuario no encontrado'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return HttpResponseBadRequest('Método no permitido')

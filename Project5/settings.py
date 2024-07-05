@@ -1,3 +1,4 @@
+import os
 """
 Django settings for Project5 project.
 
@@ -9,6 +10,8 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+
+STATIC_URL = '/static/'
 
 from pathlib import Path
 
