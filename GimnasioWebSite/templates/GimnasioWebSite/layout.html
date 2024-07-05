@@ -12,35 +12,85 @@
         Gimnasio Codemakers
       {% endblock %}
     </title>
+    <style>
+      .navbar-brand img {
+        height: 40px; /* Ajusta la altura del logo según tus necesidades */
+      }
+      .nav-item .nav-link {
+        color: #333; /* Color del texto de los enlaces */
+      }
+      .nav-item .nav-link:hover {
+        color: #007bff; /* Color del texto al pasar el mouse */
+      }
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' linecap='round' linejoin='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      }
+    </style>
   </head>
 
   <body>
-    <nav id="principalNavBar">
-      <div class="logoNavBar">
-        <a href="{% url 'home' %}"><img src="" alt="Gym Logo" /></a>
-      </div>
-      <div class="menu">
-        <ul>
-          <a href="#"><li>Informacion</li></a> 
-          {% comment %} {% if request.user.rol == 'Cliente' and user.is_authenticated and request.user.rol != 'Entrenador' %} {% endcomment %}
-          {% if user.is_authenticated %}
-          <a href="{% url 'verSuscripciones' %}"><li>Suscribirse</li></a>
-          <a href="{% url 'verSuscripciones' %}"><li>Mis Suscripciones</li></a>
-          {% endif %}
-          {% comment %} {% else %} {% endcomment %}
-            {% comment %} <a href="#"><li>Administrar</li></a> {% endcomment %}
-          {% comment %} {% endif %} {% endcomment %}
-          {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}"><li>Cerrar Sesion</li></a>
-          {% else %}
-            <a href="{% url 'login' %}"><li>Iniciar sesión</li></a>
-            <a href="{% url 'register' %}"><li>Registrarse</li></a>
-          {% endif %}
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <img src="{% static 'GimnasioWebSite/logo.png' %}" alt="Gym Logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Información
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url "infoMaquinas" %}">Maquinas</a></li>
+                  <li><a class="dropdown-item" href="{% url "infoStaff" %}">Personal</a></li>
+                </ul>
+              </li>
+            </li>
+            {% if user.is_authenticated and request.user.rol == 'Cliente' or request.user.is_staff %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'verSuscripciones' %}">Suscribirse</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'verSuscripciones' %}">Mis Suscripciones</a>
+              </li>
+            {% endif %}
+            {% if user.is_authenticated and request.user.rol == 'Asistente' or request.user.is_staff %}
+              <li class="nav-item">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Administrar
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url "asistencias" %}">Asistencias</a></li>
+                  </ul>
+                </li>
+              </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link btn btn-danger" href="{% url 'logout' %}">Cerrar Sesión</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
     </nav>
+
     {% block body %}
+    
     {% endblock %}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{% static 'GimnasioWebSite/main.js' %}"></script>
   </body>

@@ -74,7 +74,7 @@ class Factura(models.Model):
         return f"Factura {self.id} - {self.usuario.username}"
 
 class Asistencia(models.Model):
-    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)
     horaEntrada = models.DateTimeField(auto_now_add=True)
     horaSalida = models.DateTimeField(null=True, blank=True)
     cumplimiento = models.CharField(max_length=8,null=True,blank=True)
