@@ -15,6 +15,7 @@ urlpatterns = [
     path('asistencias', views.asistencias, name='asistencias'),
     path('suscripciones/historial', views.historialSuscripciones, name="historial"),
     path('perfil/<int:id>', views.perfil, name="perfil"),
+    path('info/maquinas/filtro', views.maquinasFiltro, name="maquinasFiltro"),
     
     #URLs de API
     path('asistencias/data', views.get_attendance_data, name='get_attendance_data'),

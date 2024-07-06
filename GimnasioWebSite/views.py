@@ -77,7 +77,12 @@ def CerrarSesion(request):
     return redirect(home)
 
 def verStaff(request):
-    return render(request, "GimnasioWebSite/infoStaff.html")
+    entrenadores = Staff.objects.get(rol="Entrenador")
+    asistentes = Staff.objects.get(rol="Asistente")
+    return render(request, "GimnasioWebSite/infoStaff.html", {
+        "Entrenadores": entrenadores,
+        "Asistentes": asistentes
+    })
 
 
 def verMaquinas(request):
@@ -85,6 +90,19 @@ def verMaquinas(request):
     return render(request, "GimnasioWebSite/Maquinas.html", {
         "Maquinas": maquinas,
     })
+
+def maquinasFiltro(request):
+    tipo = request.GET.get('selectTypes', 'sinFiltro')
+    
+    if tipo == 'sinFiltro':
+        maquinas = Maquina.objects.all()
+    else:
+        maquinas = Maquina.objects.filter(tipo=tipo)
+    
+    context = {
+        'Maquinas': maquinas,
+    }
+    return render(request, 'Maquinas.html', context)
 
 @login_required
 def verSuscripciones(request):
@@ -277,5 +295,28 @@ def historialSuscripciones(request):
     }
     return render(request, 'GimnasioWebSite/historialSuscripciones.html', context)
 
+@login_required
 def perfil(request, id):
-    pass
+    usuario = Usuario.objects.get(pk=id)
+
+    # Redirigir al home si el usuario es admin pero no está viendo su propio perfil
+    if request.user.is_staff and request.user == usuario:
+        return redirect(home)
+
+    if request.method == 'POST':
+        if usuario == request.user:
+            usuario.telefono = request.POST.get('telefono', usuario.telefono)
+            usuario.telefonoEmergencia = request.POST.get('telefonoEmergencia', usuario.telefonoEmergencia)
+            usuario.direccion = request.POST.get('direccion', usuario.direccion)
+            if hasattr(usuario, 'staff'):
+                usuario.staff.imagen = request.POST.get('imagen', usuario.staff.imagen)
+                usuario.staff.descripcion = request.POST.get('descripcion', usuario.staff.descripcion)
+                usuario.staff.save()
+            usuario.save()
+            sweetify.success(request, 'Perfil actualizado exitosamente!', timer=3000)
+        return redirect(perfil, id=id)
+
+    context = {
+        'usuario': usuario,
+    }
+    return render(request, 'GimnasioWebSite/perfil.html', context)

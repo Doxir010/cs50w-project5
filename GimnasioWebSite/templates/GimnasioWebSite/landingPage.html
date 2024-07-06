@@ -1,27 +1,15 @@
 {% extends 'GimnasioWebSite/layout.html' %}
+{% load static %}
 
 {% block body %}
-  <div id="TituloYLogoIndex">
-    <h1>Gimnasio Codemakers</h1>
-    <img src="#" alt="logo" />
+<div class="container text-center my-5">
+  <div id="TituloYLogoIndex" class="mb-4">
+    <h1 class="display-4">Gimnasio Codemakers</h1>
+    <img src="{% static "GimnasioWebSite/logo.png" %}" alt="logo" class="img-fluid my-3" style="max-width: 150px;">
   </div>
-  <section id="InformacionSuscripcionesIndex">
-    {% for plan in planes %}
-      <article class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-body-secondary">Precio: <strong>{{ plan.precio }} córdobas</strong></h6>
-          <p class="card-text">{{ plan.descripcion }}</p>
-        </div>
-      </article>
-    {% endfor %}
-  </section>
-
-  <section id="CarruselImagenesIndex"></section>
-
-  <section id="InformacionMaquinasIndex"></section>
-
-  <section id="InformacionStaffIndex"></section>
-
-  <footer id="FooterGeneral"></footer>
+  <h2 class="mb-4">Comienza ya</h2>
+  <a href="{% url "verSuscripciones" %}">
+    <button class="btn btn-primary btn-lg">Empieza ahora!!</button>
+  </a>
+</div>
 {% endblock %}

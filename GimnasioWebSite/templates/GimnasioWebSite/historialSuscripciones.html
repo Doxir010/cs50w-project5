@@ -34,7 +34,7 @@
       {% for pago in pagos %}
       <div class="card mb-3">
         <div class="card-header">
-          {{ pago.cliente.get_full_name }}
+          <a href="{% url "perfil" pago.cliente.id %}">{{ pago.cliente.get_full_name }}</a>
         </div>
         <div class="card-body">
           <h5 class="card-title">{{ pago.plan.nombre }}</h5>

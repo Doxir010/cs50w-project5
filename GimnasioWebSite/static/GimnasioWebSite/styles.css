@@ -44,7 +44,6 @@ body {
   background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' linecap='round' linejoin='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* Cartas */
 .card {
   margin-bottom: 1.5rem;
 }
@@ -54,7 +53,6 @@ body {
   font-weight: bold;
 }
 
-/* Botones */
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
@@ -65,7 +63,6 @@ body {
   border-color: #0056b3;
 }
 
-/* Modales */
 .modal {
   display: none;
   position: fixed;
@@ -125,7 +122,6 @@ body {
   cursor: pointer;
 }
 
-/* Form Styles */
 #registerForm .form-control {
   margin-bottom: 1rem;
 }
@@ -134,7 +130,6 @@ body {
   font-size: 0.875rem;
 }
 
-/* Responsive Styles */
 @media (max-width: 767px) {
   .form-check {
       display: block;
@@ -146,7 +141,6 @@ body {
   }
 }
 
-/* Success and Error Modals */
 #successModal .modal-title,
 #errorModal .modal-title {
   font-weight: bold;
@@ -167,4 +161,40 @@ body {
 #errorModal .btn-primary:hover {
   background-color: #0056b3;
   border-color: #0056b3;
+}
+
+.img-staff {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.card-body {
+  flex: 1;
+}
+
+@media (max-width: 767px) {
+  .card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .img-staff {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+#gridMaquinas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
