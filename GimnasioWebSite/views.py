@@ -1,5 +1,9 @@
 from .models import *
 from . import helpers
+import sweetify
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
+from django.db.models import Q
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -82,35 +86,84 @@ def verMaquinas(request):
         "Maquinas": maquinas,
     })
 
-
+@login_required
 def verSuscripciones(request):
     return render(request, "GimnasioWebSite/verSuscripciones.html", {
         "Suscripciones": Plan.objects.all()
     })
     
     
-def pagarSuscripcion(request, nombre):
-    instanciaPlan = nombre
+@login_required
+def pagarSuscripcion(request, id):
+    instanciaPlan = get_object_or_404(Plan, pk=id)
+    usuario = request.user
+    suscripcion_activa = Suscripcion.objects.filter(cliente=usuario, fechaFinal__gte=date.today()).first()
+
     if request.method == 'POST':
         titular = request.POST["name"]
         numeroTarjeta = request.POST["cardNumber"]
-        fechaVencimiento = request.POST["expDate"]
+        fechaVencimiento_str = request.POST["expDate"]
         CVV = request.POST["CVV"]
-        print(titular)
-        print(numeroTarjeta)
-        print(fechaVencimiento)
-        print(CVV)
-        return redirect(pagarSuscripcion, nombre=nombre)
-    
+
+        # Convertir fecha de vencimiento a formato de datetime
+        try:
+            fechaVencimiento = datetime.strptime(fechaVencimiento_str, '%m/%y').date()
+        except ValueError:
+            sweetify.error(request, 'Formato de fecha incorrecto. Use MM/YY.', timer=4000)
+            return redirect(pagarSuscripcion, id=id)
+
+        # Obtener el último día del mes de la fecha de vencimiento
+        fechaVencimiento = fechaVencimiento.replace(day=1) + relativedelta(months=1, days=-1)
+
+        # Validar que la fecha de vencimiento sea posterior a la fecha actual
+        if fechaVencimiento < date.today():
+            sweetify.error(request, 'La fecha de vencimiento de la tarjeta es anterior a la fecha actual.', timer=4000)
+            return redirect(pagarSuscripcion, id=id)
+
+        # Determinar la duración del plan (mensual o semanal)
+        duracion_plan = instanciaPlan.duracion
+
+        # Calcular las fechas de inicio y finalización de la suscripción
+        if suscripcion_activa:
+            fecha_inicio_nueva = suscripcion_activa.fechaFinal + relativedelta(days=1)
+        else:
+            fecha_inicio_nueva = date.today()
+
+        if duracion_plan == 'M':
+            fecha_final_nueva = fecha_inicio_nueva + relativedelta(months=1, days=-1)
+        elif duracion_plan == 'S':
+            fecha_final_nueva = fecha_inicio_nueva + relativedelta(weeks=1, days=-1)
+        else:
+            sweetify.error(request, 'Duración de plan no válida.', timer=4000)
+            return redirect(pagarSuscripcion, id=id)
+
+        # Crear la nueva suscripción
+        nueva_suscripcion = Suscripcion.objects.create(
+            cliente=usuario,
+            plan=instanciaPlan,
+            fechaInicio=fecha_inicio_nueva,
+            fechaFinal=fecha_final_nueva
+        )
+
+        # Crear el pago
+        nuevo_pago = PagoPlan.objects.create(
+            cliente=usuario,
+            plan=instanciaPlan
+        )
+
+
+        sweetify.success(request, 'Pago realizado exitosamente')
+        return redirect('pagarSuscripcion', id=id)
     else:
         return render(request, "GimnasioWebSite/pagoSuscripcion.html", {
-            "Plan": instanciaPlan
+            "plan": instanciaPlan
         })
         
 
 @login_required
 def asistencias(request):
     return render(request, 'GimnasioWebSite/asistencias.html')
+
 
 def get_attendance_data(request):
     role = request.GET.get('role', 'all')
@@ -143,13 +196,12 @@ def get_attendance_data(request):
 
     return JsonResponse(data, safe=False)
 
+
+@csrf_exempt
 def add_attendance(request):
     if request.method == 'POST':
         try:
-            # Decodificar el cuerpo de la solicitud como JSON
             data = json.loads(request.body.decode('utf-8'))
-
-            # Extraer datos del JSON
             role_option = data.get('roleOption')
             user_input = data.get('userInput')
             entry_date = parse_datetime(data.get('entryDate'))
@@ -157,14 +209,11 @@ def add_attendance(request):
             entry_time = parse_datetime(data.get('entryTime'))
             exit_time = parse_datetime(data.get('exitTime'))
 
-            # Verificar que todos los campos requeridos están presentes
-            if not all([role_option, user_input, entry_date, compliance, entry_time]):
+            if not all([role_option, user_input, (entry_date or entry_time), compliance]):
                 return JsonResponse({'success': False, 'error': 'Faltan campos requeridos.'}, status=400)
 
-            # Obtener el usuario por ID
             usuario = Usuario.objects.get(id=user_input)
 
-            # Crear una nueva asistencia
             if role_option == 'Cliente':
                 Asistencia.objects.create(
                     Usuario=usuario,
@@ -191,3 +240,42 @@ def add_attendance(request):
     return HttpResponseBadRequest('Método no permitido')
 
 
+def get_users_by_role(request):
+    role = request.GET.get('role')
+    if role == 'Cliente':
+        users = Usuario.objects.filter(rol='Cliente')
+    else:
+        users = Usuario.objects.filter(rol__in=['Entrenador', 'Asistente'])
+    user_data = [{'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name} for user in users]
+    return JsonResponse(user_data, safe=False)
+
+
+@login_required
+def historialSuscripciones(request):
+    user = request.user
+    orden = request.GET.get('orden', 'recientes')
+    search_query = request.GET.get('search', '')
+
+    if user.rol == 'Cliente':
+        pagos = PagoPlan.objects.filter(cliente=user).order_by('-fechaPago' if orden == 'recientes' else 'fechaPago')
+    elif user.rol == 'Asistente' or user.is_staff:
+        if search_query:
+            pagos = PagoPlan.objects.filter(
+                Q(cliente__first_name__icontains=search_query) |
+                Q(cliente__last_name__icontains=search_query)
+            ).order_by('-fechaPago' if orden == 'recientes' else 'fechaPago')
+        else:
+            pagos = PagoPlan.objects.all().order_by('-fechaPago' if orden == 'recientes' else 'fechaPago')
+    else:
+        pagos = []
+
+    context = {
+        'user': user,
+        'pagos': pagos,
+        'orden': orden,
+        'search_query': search_query,
+    }
+    return render(request, 'GimnasioWebSite/historialSuscripciones.html', context)
+
+def perfil(request, id):
+    pass

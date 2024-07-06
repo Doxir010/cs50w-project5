@@ -37,6 +37,11 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <label for="">Sesion iniciada como: </label><a class="nav-link" href="{% url 'perfil' user.id %}"><strong>{{ user.username }}</strong></a>
+        </li>
+        {% endif %}
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
@@ -55,20 +60,13 @@
                 <a class="nav-link" href="{% url 'verSuscripciones' %}">Suscribirse</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'verSuscripciones' %}">Mis Suscripciones</a>
+                <a class="nav-link" href="{% url 'historial' %}">Suscripciones</a>
               </li>
             {% endif %}
             {% if user.is_authenticated and request.user.rol == 'Asistente' or request.user.is_staff %}
-              <li class="nav-item">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Administrar
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url "asistencias" %}">Asistencias</a></li>
-                  </ul>
-                </li>
-              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "asistencias" %}">Asistencias</a>
+            </li>  
             {% endif %}
             {% if user.is_authenticated %}
             <li class="nav-item">
@@ -91,7 +89,11 @@
     
     {% endblock %}
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{% static 'GimnasioWebSite/main.js' %}"></script>
   </body>
 </html>
+
+{% load sweetify %}
+{% sweetify %}

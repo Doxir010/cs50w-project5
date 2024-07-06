@@ -1,0 +1,91 @@
+{% extends 'GimnasioWebSite/layout.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-4">
+  {% if user.is_authenticated %}
+    {% if user.rol == 'Cliente' or user.is_staff %}
+      <!-- Dropdown para ordenar historial para clientes -->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="ordenSelect" class="form-label">Ordenar por:</label>
+          <select class="form-select" id="ordenSelect">
+            <option value="cronologico" {% if orden == 'cronologico' %}selected{% endif %}>Orden cronológico</option>
+            <option value="recientes" {% if orden == 'recientes' %}selected{% endif %}>Más recientes primero</option>
+          </select>
+        </div>
+      </div>
+    {% endif %}
+    {% if user.rol == 'Asistente' or user.is_staff %}
+      <!-- Barra de búsqueda para asistentes -->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="searchInput" class="form-label">Buscar por nombre:</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchInput" placeholder="Nombre de usuario" value="{{ search_query }}">
+            <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+    <!-- Historial de suscripciones pagadas -->
+    <div id="historialSuscripciones">
+      {% for pago in pagos %}
+      <div class="card mb-3">
+        <div class="card-header">
+          {{ pago.cliente.get_full_name }}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ pago.plan.nombre }}</h5>
+          <p class="card-text">Fecha de pago: {{ pago.fechaPago }}</p>
+          <p class="card-text">Monto pagado: {{ pago.plan.precio }} córdobas</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <p>Debes iniciar sesión para ver tu historial de suscripciones.</p>
+  {% endif %}
+</div>
+
+<script>
+  // Script para ordenar y filtrar historial de suscripciones
+  document.addEventListener('DOMContentLoaded', function() {
+    // Ordenar historial de suscripciones
+    const ordenSelect = document.getElementById('ordenSelect');
+    const historialSuscripciones = document.getElementById('historialSuscripciones');
+
+    ordenSelect.addEventListener('change', function() {
+      const orden = ordenSelect.value;
+      const url = window.location.href.split('?')[0];  // Obtener URL base sin parámetros
+      const params = new URLSearchParams(window.location.search);
+
+      if (orden === 'cronologico') {
+        params.set('orden', 'cronologico');
+      } else {
+        params.set('orden', 'recientes');
+      }
+
+      window.location.href = `${url}?${params.toString()}`;
+    });
+
+    // Buscar por nombre de usuario (solo para asistentes y administradores)
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    searchButton.addEventListener('click', function() {
+      const searchTerm = searchInput.value.trim();
+      const url = window.location.href.split('?')[0];  // Obtener URL base sin parámetros
+      const params = new URLSearchParams(window.location.search);
+      if (searchTerm.length > 0) {
+        params.set('search', searchTerm);
+      } else {
+        params.delete('search');
+      }
+      window.location.href = `${url}?${params.toString()}`;
+    });
+  });
+</script>
+{% endblock %}

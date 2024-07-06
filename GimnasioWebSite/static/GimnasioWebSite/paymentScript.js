@@ -198,7 +198,7 @@ window.onload = function () {
     
     
     //Generate random card number from list of known test numbers
-    const randomCard = function () {
+    /*const randomCard = function () {
         let testCards = [
             '4000056655665556',
             '5200828282828210',
@@ -214,7 +214,7 @@ window.onload = function () {
     }
     generatecard.addEventListener('click', function () {
         randomCard();
-    });
+    });*/
     
     
     // CREDIT CARD IMAGE JS

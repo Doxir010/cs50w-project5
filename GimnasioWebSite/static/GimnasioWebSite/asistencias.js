@@ -11,23 +11,42 @@ document.addEventListener('DOMContentLoaded', function () {
     const staffOption = document.getElementById('staffOption');
     const clientFields = document.getElementById('clientFields');
     const staffFields = document.getElementById('staffFields');
+    const userInput = document.getElementById('userInput');
     const attendanceTableBody = document.getElementById('attendanceTableBody');
 
     function toggleFormFields() {
         if (clientOption.checked) {
             clientFields.style.display = 'block';
             staffFields.style.display = 'none';
+            loadUsers('Cliente');
         } else if (staffOption.checked) {
             clientFields.style.display = 'none';
             staffFields.style.display = 'block';
+            loadUsers('Staff');
         }
     }
 
     clientOption.addEventListener('change', toggleFormFields);
     staffOption.addEventListener('change', toggleFormFields);
 
+    function loadUsers(role) {
+        fetch(`/usuarios/data?role=${role}`)
+            .then(response => response.json())
+            .then(data => {
+                userInput.innerHTML = '';
+                data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.first_name} ${user.last_name}`;
+                    userInput.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
     addAttendanceButton.onclick = function () {
         attendanceModal.style.display = 'block';
+        toggleFormFields();  // Load users when opening modal
     }
 
     closeModal.onclick = function () {
@@ -42,32 +61,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     attendanceForm.onsubmit = function(event) {
         event.preventDefault();
-    //     const formData = new FormData(attendanceForm);
-    //     const data = {
-    //         roleOption: formData.get('roleOption'),
-    //         userInput: formData.get('userInput').value,
-    //         entryDate: formData.get('entryDate').value,
-    //         compliance: formData.get('compliance').value,
-    //         entryTime: formData.get('entryTime').value,
-    //         exitTime: formData.get('exitTime').value,
-    //     };
-    //     console.log(data)
-    fetch('/asistencias/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            roleOption: document.querySelector('#roleOption').value,
-            userInput: document.querySelector('#userInput').value,
-            entryDate: document.querySelector('#entryDate').value,
-            compliance: document.querySelector('#compliance').value,
-            entryTime: document.querySelector('#entryTime').value,
-            exitTime: document.querySelector('#exitTime').value,
+        const formData = {
+            roleOption: document.querySelector('input[name="roleOption"]:checked').value,
+            userInput: userInput.value,
+            entryDate: document.getElementById('entryDate').value,
+            compliance: document.getElementById('compliance').value,
+            entryTime: document.getElementById('entryTime').value,
+            exitTime: document.getElementById('exitTime').value
+        };
+
+        fetch('/asistencias/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(formData)
         })
-        
-    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -79,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
         .catch(error => console.error('Error:', error));
-}
+    }
 
     searchButton.onclick = function () {
         loadAttendanceData();

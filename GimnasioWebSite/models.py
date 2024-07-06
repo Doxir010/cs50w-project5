@@ -63,16 +63,6 @@ class PagoPlan(models.Model):
         return f"Cliente: {self.cliente} // Plan pagado: {self.plan} // Fecha de pago: {self.fechaPago}"
     
 
-class Factura(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    pago = models.OneToOneField(PagoPlan, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
-    fecha_vencimiento = models.DateField()
-    pagado = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"Factura {self.id} - {self.usuario.username}"
-
 class Asistencia(models.Model):
     Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)
     horaEntrada = models.DateTimeField(auto_now_add=True)

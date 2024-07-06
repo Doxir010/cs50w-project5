@@ -13,7 +13,7 @@
             <h5 class="card-title">{{ suscripcion.nombre }}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">Precio: {{ suscripcion.precio }}</h6>
             <p class="card-text">{{ suscripcion.descripcion }}</p>
-            <a href="{% url 'pagoSuscripcion' suscripcion.nombre %} " class="card-link btn btn-success">Ir a pagar</a>
+            <a href="{% url 'pagoSuscripcion' id=suscripcion.id %} " class="card-link btn btn-success">Ir a pagar</a>
             </div>
         </article>
     {% endfor %}
