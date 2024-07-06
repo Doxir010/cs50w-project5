@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const roleFilter = document.getElementById('roleFilter');
     const sortOrder = document.getElementById('sortOrder');
     const searchName = document.getElementById('searchName');
@@ -26,15 +26,15 @@ document.addEventListener('DOMContentLoaded', function() {
     clientOption.addEventListener('change', toggleFormFields);
     staffOption.addEventListener('change', toggleFormFields);
 
-    addAttendanceButton.onclick = function() {
+    addAttendanceButton.onclick = function () {
         attendanceModal.style.display = 'block';
     }
 
-    closeModal.onclick = function() {
+    closeModal.onclick = function () {
         attendanceModal.style.display = 'none';
     }
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == attendanceModal) {
             attendanceModal.style.display = 'none';
         }
@@ -42,24 +42,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     attendanceForm.onsubmit = function(event) {
         event.preventDefault();
-        const formData = new FormData(attendanceForm);
-        const data = {
-            roleOption: formData.get('roleOption'),
-            userInput: formData.get('userInput'),
-            entryDate: formData.get('entryDate'),
-            compliance: formData.get('compliance'),
-            entryTime: formData.get('entryTime'),
-            exitTime: formData.get('exitTime'),
-        };
-
-        fetch('/asistencias/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify(data)
+    //     const formData = new FormData(attendanceForm);
+    //     const data = {
+    //         roleOption: formData.get('roleOption'),
+    //         userInput: formData.get('userInput').value,
+    //         entryDate: formData.get('entryDate').value,
+    //         compliance: formData.get('compliance').value,
+    //         entryTime: formData.get('entryTime').value,
+    //         exitTime: formData.get('exitTime').value,
+    //     };
+    //     console.log(data)
+    fetch('/asistencias/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            roleOption: document.querySelector('#roleOption').value,
+            userInput: document.querySelector('#userInput').value,
+            entryDate: document.querySelector('#entryDate').value,
+            compliance: document.querySelector('#compliance').value,
+            entryTime: document.querySelector('#entryTime').value,
+            exitTime: document.querySelector('#exitTime').value,
         })
+        
+    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -71,17 +79,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => console.error('Error:', error));
-    }
+}
 
-    searchButton.onclick = function() {
+    searchButton.onclick = function () {
         loadAttendanceData();
     }
 
-    roleFilter.onchange = function() {
+    roleFilter.onchange = function () {
         loadAttendanceData();
     }
 
-    sortOrder.onchange = function() {
+    sortOrder.onchange = function () {
         loadAttendanceData();
     }
 
@@ -101,20 +109,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const name = searchName.value;
 
         fetch(`/asistencias/data?role=${role}&order=${order}&name=${name}`)
-        .then(response => response.json())
-        .then(data => {
-            attendanceTableBody.innerHTML = '';
-            data.forEach(attendance => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+            .then(response => response.json())
+            .then(data => {
+                attendanceTableBody.innerHTML = '';
+                data.forEach(attendance => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
                     <td>${attendance.nombreCompleto}</td>
                     <td>${formatDate(attendance.horaEntrada)}</td>
                     <td>${attendance.horaSalida ? formatDate(attendance.horaSalida) : attendance.cumplimiento}</td>
                 `;
-                attendanceTableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error:', error));
+                    attendanceTableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function getCookie(name) {
