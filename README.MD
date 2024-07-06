@@ -56,16 +56,16 @@ El proyecto está construido utilizando el framework Django, que ofrece una robu
 2. Abre tu navegador y ve a `http://127.0.0.1:8000/` para ver la aplicación en funcionamiento.
 
 ## Distinción y Complejidad
-Hablando respecto al apartado de distincion y complejidad considero que mi proyecto es en cierta forma unica ya que implementa varios de los conocimientos
-adquiridos en los distintos projects anteriores realizados en este curso de modo que crea una aplicacion a la cual se le puede sacar provecho en la vida real.
-Considero el apartado de pago de membresia y su validado de fechas como lo que mas se me dificulto asi como la implementacion de js para apartados como la asistencia.
-ya que por el diseño que elegi no lo hizo una tarea facil.
+Hablando respecto al apartado de distinción y complejidad considero que mi proyecto es en cierta forma única ya que implementa varios de los conocimientos
+adquiridos en los distintos projects anteriores realizados en este curso de modo que crea una aplicación a la cual se le puede sacar provecho en la vida real.
+Considero el apartado de pago de membresía y su validado de fechas como lo que mas se me dificulto asi como la implementación de js para apartados como la asistencia.
+ya que por el diseño que elegí no lo hizo una tarea fácil.
 
-## Como surgio esta idea
+## Como surgió esta idea
 Esta idea vino a mi mente debido a que al ir a un gimnasio por primera vez note como este llevaba registro aun con un cuaderno donde todos se apuntaban y si bien
-esto puede ser conveniente en ciertos aspectos, en mas de una ocasion veia a los encargados batallar por buscar algunos registros. Es por esto que comenze a pensar en
-esta idea y luego el resto de apartados surgio en base a mi abstraccion sobre las necesidades que este tipo de negocios pueden llegar a tener. Porque a veces
-no es necesario pensar en una idea revolucionaria que vaya a ser la proxima gran app del mercado cuando en realidad la escencia de ser desarrollador de aplicaciones es 
+esto puede ser conveniente en ciertos aspectos, en mas de una ocasión veía a los encargados batallar por buscar algunos registros. Es por esto que comenze a pensar en
+esta idea y luego el resto de apartados surgió en base a mi abstracción sobre las necesidades que este tipo de negocios pueden llegar a tener. Porque a veces
+no es necesario pensar en una idea revolucionaria que vaya a ser la próxima gran app del mercado cuando en realidad la esencia de ser desarrollador de aplicaciones es 
 suplir las necesidades de los negocios mas cotidianos.
 
 ## Perfil de GitHub
