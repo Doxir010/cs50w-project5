@@ -16,9 +16,12 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ entrenador.nombre }}</h5>
                             <p class="card-text">{{ entrenador.descripcion }}</p>
+
                         </div>
                     </div>
                 </div>
+                {%empty%}
+                    aun no hay entrenadores
             {% endfor %}
         </div>
     </section>
@@ -36,6 +39,8 @@
                         </div>
                     </div>
                 </div>
+                {%empty%}
+                    aun no hay asistentes
             {% endfor %}
         </div>
     </section>

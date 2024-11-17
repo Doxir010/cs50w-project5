@@ -77,12 +77,17 @@ def CerrarSesion(request):
     return redirect(home)
 
 def verStaff(request):
-    entrenadores = Staff.objects.get(rol="Entrenador")
-    asistentes = Staff.objects.get(rol="Asistente")
-    return render(request, "GimnasioWebSite/infoStaff.html", {
+    try:
+        entrenadores = Staff.objects.get(rol="Entrenador")
+        asistentes = Staff.objects.get(rol="Asistente")
+        return render(request, "GimnasioWebSite/infoStaff.html", {
         "Entrenadores": entrenadores,
         "Asistentes": asistentes
     })
+    except Exception as e:
+        print(e)
+        return redirect(home)
+
 
 
 def verMaquinas(request):
